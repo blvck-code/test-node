@@ -23,10 +23,10 @@ const getTodo = async (req, res) => {
 };
 
 const createTodo = async (req, res) => {
-  const { title, isComplete } = req.body;
+  const { title, description, isComplete } = req.body;
 
   try {
-    const todo = await Todo.create({ title, isComplete });
+    const todo = await Todo.create({ title, description, isComplete });
     res.status(201).json(todo);
   } catch (err) {
     res.status(400).json({ error: "New todo could not be added" });
