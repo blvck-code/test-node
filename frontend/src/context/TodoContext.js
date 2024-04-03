@@ -4,6 +4,11 @@ export const TodoContext = createContext();
 
 export const todoReducer = (state, action) => {
   switch (action.type) {
+    case "ADD_TODO":
+      console.log("Payload ==>>", action);
+      return {
+        todos: [action.payload, ...state.todos],
+      };
     default:
       return state;
   }

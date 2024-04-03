@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { TodoContext } from "../context/TodoContext";
 
 const TodoForm = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
-  const handleAddTodo = () => {};
+  const { dispatch } = useContext(TodoContext);
+
+  const handleAddTodo = () => {
+    dispatch({ type: "ADD_TODO", payload: { newTitle, newDescription } });
+    setNewTitle("");
+    setNewDescription("");
+  };
 
   return (
     <div className="todo-input">

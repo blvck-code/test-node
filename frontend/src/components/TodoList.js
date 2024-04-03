@@ -36,7 +36,26 @@ const TodoList = () => {
       </div>
 
       <div className="todo-list">
-        {isCompleteScreen === false &&
+        {todos.map((item, index) => (
+          <div className="todo-list-item" key={index}>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <p>
+                <small>Completed on: {item.completedOn}</small>
+              </p>
+            </div>
+
+            <div>
+              <AiOutlineDelete
+                className="icon"
+                onClick={() => handleDeleteCompletedTodo(index)}
+                title="Delete?"
+              />
+            </div>
+          </div>
+        ))}
+        {/* {isCompleteScreen === false &&
           todos.map((item, index) => {
             if (currentEdit === index) {
               return (
@@ -111,7 +130,7 @@ const TodoList = () => {
                 </div>
               </div>
             );
-          })}
+          })} */}
       </div>
     </>
   );
