@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/api", todoRoutes);
+app.use("/api/todo", todoRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)

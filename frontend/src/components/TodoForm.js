@@ -8,12 +8,12 @@ const TodoForm = () => {
   const { dispatch } = useContext(TodoContext);
 
   const handleAddTodo = async () => {
-    const resp = await fetch("http://localhost:8000/api/todo/create", {
+    const resp = await fetch("/api/todo/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, description }),
+      body: JSON.stringify({ title, description, isComplete: false }),
     });
     const json = await resp.json();
 

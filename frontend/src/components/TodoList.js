@@ -13,7 +13,7 @@ const TodoList = () => {
   const handleUpdateTitle = () => {};
   const handleUpdateDescription = () => {};
   const handleUpdateToDo = () => {};
-  const handleDeleteTodo = () => {};
+
   const handleComplete = () => {};
   const handleEdit = () => {};
   const handleDeleteCompletedTodo = () => {};
@@ -23,7 +23,7 @@ const TodoList = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const resp = await fetch("http://localhost:8000/api/todo");
+      const resp = await fetch("/api/todo");
       const json = await resp.json();
 
       if (resp.ok) {
@@ -36,6 +36,22 @@ const TodoList = () => {
       .then((r) => console.log("Fetch complete"))
       .catch((err) => console.log("Failed"));
   }, []);
+
+  const handleDeleteTodo = async (id) => {
+    const resp = await fetch("http://localhost:8000/api/todo/" + id, {
+      method: "DELETE",
+    });
+    const json = await resp.json();
+
+    if (resp.ok) {
+      console.log("Delete success ==>>", json);
+      dispatch({ type: "DELETE_TODO", payload: json });
+    } else {
+      console.log("Failed ==>>", json);
+    }
+
+    console.log("Item id ==>>", id);
+  };
 
   return (
     <>
@@ -55,25 +71,27 @@ const TodoList = () => {
       </div>
 
       <div className="todo-list">
-        {todos.map(({ title, isComplete, description, updatedAt }, index) => (
-          <div className="todo-list-item" key={index}>
-            <div>
-              <h3>{title}</h3>
-              <p>{description}</p>
-              <p>
-                <small>Completed on: {updatedAt}</small>
-              </p>
-            </div>
+        {todos.map(
+          ({ _id, title, isComplete, description, updatedAt }, index) => (
+            <div className="todo-list-item" key={index}>
+              <div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <p>
+                  <small>Completed on: {updatedAt}</small>
+                </p>
+              </div>
 
-            <div>
-              <AiOutlineDelete
-                className="icon"
-                onClick={() => handleDeleteCompletedTodo(index)}
-                title="Delete?"
-              />
+              <div>
+                <AiOutlineDelete
+                  className="icon"
+                  onClick={() => handleDeleteTodo(_id)}
+                  title="Delete?"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
         {/* {isCompleteScreen === false &&
           todos.map((item, index) => {
             if (currentEdit === index) {
