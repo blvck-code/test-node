@@ -9,6 +9,10 @@ export const todoReducer = (state, action) => {
       return {
         todos: [action.payload, ...state.todos],
       };
+    case "SET_TODOS":
+      return {
+        todos: action.payload,
+      };
     default:
       return state;
   }
@@ -16,20 +20,7 @@ export const todoReducer = (state, action) => {
 
 const TodoContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, {
-    todos: [
-      {
-        id: 1,
-        title: "Wash dishes",
-        description: "High priority",
-        isComplete: false,
-      },
-      {
-        id: 2,
-        title: "Go shopping",
-        description: "High priority",
-        isComplete: true,
-      },
-    ],
+    todos: [],
   });
 
   return (

@@ -2,15 +2,28 @@ import React, { useContext, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
 
 const TodoForm = () => {
-  const [newTitle, setNewTitle] = useState("");
-  const [newDescription, setNewDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const { dispatch } = useContext(TodoContext);
 
-  const handleAddTodo = () => {
-    dispatch({ type: "ADD_TODO", payload: { newTitle, newDescription } });
-    setNewTitle("");
-    setNewDescription("");
+  const handleAddTodo = async () => {
+    const resp = await fetch("http://localhost:8000/api/todo/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, description }),
+    });
+    const json = await resp.json();
+
+    if (resp.ok) {
+      console.log("Success ==>>", json);
+      dispatch({ type: "ADD_TODO", payload: json });
+
+      setTitle("");
+      setDescription("");
+    }
   };
 
   return (
@@ -19,8 +32,8 @@ const TodoForm = () => {
         <label>Title</label>
         <input
           type="text"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="What's the task title?"
         />
       </div>
@@ -28,8 +41,8 @@ const TodoForm = () => {
         <label>Description</label>
         <input
           type="text"
-          value={newDescription}
-          onChange={(e) => setNewDescription(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="What's the task description?"
         />
       </div>

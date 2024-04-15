@@ -1,9 +1,9 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import { BsCheckLg } from "react-icons/bs";
 import { TodoContext } from "../context/TodoContext";
 
 const TodoList = () => {
+  const { dispatch } = useContext(TodoContext);
   const [isCompleteScreen, setIsCompleteScreen] = useState(false);
   const [allTodos, setTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
@@ -19,30 +19,49 @@ const TodoList = () => {
   const handleDeleteCompletedTodo = () => {};
 
   const { todos } = useContext(TodoContext);
+  console.log("Todos ==>>>", todos);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const resp = await fetch("http://localhost:8000/api/todo");
+      const json = await resp.json();
+
+      if (resp.ok) {
+        console.log("Success fetched ==>>", json);
+        dispatch({ type: "SET_TODOS", payload: json });
+      }
+    };
+
+    fetchTodos()
+      .then((r) => console.log("Fetch complete"))
+      .catch((err) => console.log("Failed"));
+  }, []);
 
   return (
     <>
       <div className="btn-area">
         <button
           className={`secondaryBtn ${isCompleteScreen === false && "active"}`}
-          onClick={() => setIsCompleteScreen(false)}>
+          onClick={() => setIsCompleteScreen(false)}
+        >
           Todo {todos.length}
         </button>
         <button
           className={`secondaryBtn ${isCompleteScreen === true && "active"}`}
-          onClick={() => setIsCompleteScreen(true)}>
+          onClick={() => setIsCompleteScreen(true)}
+        >
           Completed
         </button>
       </div>
 
       <div className="todo-list">
-        {todos.map((item, index) => (
+        {todos.map(({ title, isComplete, description, updatedAt }, index) => (
           <div className="todo-list-item" key={index}>
             <div>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
+              <h3>{title}</h3>
+              <p>{description}</p>
               <p>
-                <small>Completed on: {item.completedOn}</small>
+                <small>Completed on: {updatedAt}</small>
               </p>
             </div>
 

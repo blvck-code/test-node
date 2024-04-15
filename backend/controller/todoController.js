@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const getTodos = async (req, res) => {
   const todos = await Todo.find({}).sort({ createdAt: -1 });
+  console.log("Todo list ==>>", todos);
   res.status(200).json(todos);
 };
 
